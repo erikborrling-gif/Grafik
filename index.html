@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="sv"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Grafik och koordinater</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--tx:#1b2232;--mu:#596277;--ac:#3a6cf4;--ok:#16874a;--er:#c93232;--bd:#d6dbe8;--cd:#111827;--ct:#e5ecf8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10141f;--card:#192032;--tx:#e6ebf6;--mu:#97a1b8;--ac:#7c9cff;--ok:#4cd08a;--er:#ff7b7b;--bd:#2c364f;--cd:#0a0e17}}
+:root[data-theme="dark"]{--bg:#10141f;--card:#192032;--tx:#e6ebf6;--mu:#97a1b8;--ac:#7c9cff;--ok:#4cd08a;--er:#ff7b7b;--bd:#2c364f;--cd:#0a0e17}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:980px;margin:0 auto;padding:12px}
+h1{font-size:1.5rem;margin:.3em 0}h2{margin:.2em 0 .4em;font-size:1.2rem}
+nav{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+button,select,input{font:inherit;color:inherit}
+button{background:var(--card);border:2px solid var(--bd);border-radius:10px;padding:8px 14px;cursor:pointer}
+button:hover{border-color:var(--ac)}
+button.on,button.pri{background:var(--ac);border-color:var(--ac);color:#fff}
+section{display:none;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px}
+section.on{display:block}
+.row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.col{flex:1 1 320px;min-width:0}
+canvas{width:100%;max-width:520px;height:auto;border:2px solid var(--bd);border-radius:8px;background:#fff;touch-action:none;display:block}
+.box{background:var(--bg);border-left:4px solid var(--ac);padding:8px 12px;border-radius:8px;margin:8px 0}
+.mu{color:var(--mu);font-size:.9rem}
+code,textarea{font-family:ui-monospace,Menlo,Consolas,monospace}
+.code{background:var(--cd);color:var(--ct);padding:10px;border-radius:8px;overflow-x:auto;white-space:pre;font-size:.95rem}
+textarea{width:100%;height:230px;background:var(--cd);color:var(--ct);border:2px solid var(--bd);border-radius:8px;padding:10px;font-size:.95rem;resize:vertical;tab-size:2}
+.msg{min-height:2.6em;padding:8px 12px;border-radius:8px;margin:8px 0;background:var(--bg)}
+.msg.ok{border-left:4px solid var(--ok)}.msg.er{border-left:4px solid var(--er)}
+.sl{display:grid;grid-template-columns:70px 1fr 48px;gap:8px;align-items:center;margin:4px 0}
+.sl input[type=range]{width:100%}
+.ex{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.ex button{padding:6px 12px}.ex button.done::after{content:" ✓"}
+label.t{display:block;padding:3px 0}
+.big{font-size:1.1rem;font-weight:600}
+</style></head><body><main>
+<h1>Grafik och koordinatsystem</h1>
+<p class="mu">Här övar du på cirklar, rektanglar, linjer och trianglar – med samma kommandon som du använder på koda.nu (simple.js).</p>
+<nav id="nav"></nav>
+
+<!-- 1 -->
+<section id="s0"><h2>1. Koordinatsystemet</h2>
+<div class="row"><div class="col">
+<canvas id="c1"></canvas>
+<p class="mu" id="pos">Flytta musen över rutan.</p></div>
+<div class="col">
+<div class="box">Varje punkt på skärmen har två tal: <b>x</b> (hur långt åt höger) och <b>y</b> (hur långt <b>ner</b>). Man skriver <code>(x, y)</code>.<br>
+<b>Origo (0, 0) är uppe i vänstra hörnet.</b> x växer åt höger, men y växer <b>nedåt</b> – tvärtom mot matteboken!</div>
+<p class="big" id="q1"></p>
+<p>Poäng: <b id="sc">0</b> &nbsp; <button id="skip">Hoppa över</button></p>
+<div class="msg" id="m1">Klicka på rätt ställe i rutan.</div>
+<div class="box">Tänk efter: Om du går från (100, 100) till (100, 200) – vilket håll flyttar du dig? Testa i rutan!</div>
+</div></div></section>
+
+<!-- 2 -->
+<section id="s1"><h2>2. Flytta och ändra former</h2>
+<div class="row"><div class="col">
+<canvas id="c2"></canvas>
+<p class="mu">Tips: du kan också <b>dra</b> formen med musen eller fingret.</p>
+<label class="t"><input type="checkbox" id="g2" checked> Visa rutnät</label></div>
+<div class="col">
+<div class="ex" id="shp"></div>
+<div id="sls"></div>
+<div class="ex"><label>Färg: <select id="col"></select></label></div>
+<p class="mu">Så här skriver du det på koda.nu:</p>
+<div class="code" id="cd2"></div>
+<h2 style="margin-top:14px">Uppdrag</h2>
+<label class="t"><input type="checkbox"> Flytta cirkeln till övre högra hörnet. Vilket tal blev större, x eller y?</label>
+<label class="t"><input type="checkbox"> Gör en rektangel som är en kvadrat. Vad måste vara lika?</label>
+<label class="t"><input type="checkbox"> Gör en helt vågrät linje. Vilket tal är lika i båda ändarna?</label>
+<label class="t"><input type="checkbox"> Gör en triangel som pekar nedåt.</label>
+<label class="t"><input type="checkbox"> Vad händer med cirkeln om du ökar r? Och med rektangeln om du ökar bredd?</label>
+</div></div></section>
+
+<!-- 3 -->
+<section id="s2"><h2>3. Hitta felen</h2>
+<div class="ex" id="exl"></div>
+<div class="box" id="th"></div>
+<div class="row"><div class="col">
+<p class="mu" style="margin:0 0 4px">Rätta koden här (felen är avsiktliga!):</p>
+<textarea id="ed" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
+<div class="ex" style="margin-top:8px">
+<button class="pri" id="run">▶ Kör (Ctrl+Enter)</button>
+<button id="hint">💡 Tips</button>
+<button id="sol" disabled>Visa lösning</button>
+<button id="rst">Börja om</button>
+<button id="cp">Kopiera kod</button></div>
+<label class="t"><input type="checkbox" id="g3"> Visa rutnät</label>
+<div class="msg" id="m3"></div></div>
+<div class="col">
+<p class="mu" style="margin:0 0 4px">Din bild</p><canvas id="cu"></canvas>
+<p class="mu" style="margin:8px 0 4px">Så ska det se ut</p><canvas id="ct"></canvas></div></div>
+<p class="mu">Lösningen blir tillgänglig efter 3 försök. Kopiera din färdiga kod till koda.nu för att se att den fungerar där också.</p>
+</section>
+</main>
+<script>
+/* simple.js-kommandon (som på koda.nu). Ändra bara här om någon funktion heter något annat hos er. */
+const W=400,H=300,$=s=>document.querySelector(s);
+const COLS=["red","orange","gold","green","blue","purple","black","gray","brown","pink"];
+const mk=id=>{const c=$("#"+id);c.width=W;c.height=H;return c.getContext("2d")};
+function grid(x){x.save();x.font="10px sans-serif";x.lineWidth=1;
+ for(let i=0;i<=W;i+=50){x.strokeStyle=i%100?"rgba(120,130,150,.3)":"rgba(100,110,130,.55)";x.beginPath();x.moveTo(i,0);x.lineTo(i,H);x.stroke();x.fillStyle="#556";x.fillText(i,i+2,10)}
+ for(let j=50;j<=H;j+=50){x.strokeStyle=j%100?"rgba(120,130,150,.3)":"rgba(100,110,130,.55)";x.beginPath();x.moveTo(0,j);x.lineTo(W,j);x.stroke();x.fillStyle="#556";x.fillText(j,2,j-2)}
+ x.restore()}
+function api(x){
+ const chk=(n,a,k)=>{
+  if(a.length!==k+1)throw Error(n+" behöver "+(k+1)+" värden (inklusive färgen), men du gav "+a.length+".");
+  for(let i=0;i<k;i++)if(typeof a[i]!=="number"||isNaN(a[i]))throw Error("Värde nummer "+(i+1)+" i "+n+" måste vara ett tal.");
+  if(typeof a[k]!=="string"||!CSS.supports("color",a[k]))throw Error("Färgen “"+a[k]+"” i "+n+" fungerar inte. Kolla stavningen (engelska färgnamn) och citattecknen.")};
+ return{
+  fill(...a){if(a.length!==1||typeof a[0]!=="string"||!CSS.supports("color",a[0]))throw Error("fill behöver en färg i citattecken, t.ex. fill(\"white\").");x.fillStyle=a[0];x.fillRect(0,0,W,H)},
+  rectangle(...a){chk("rectangle",a,4);x.fillStyle=a[4];x.fillRect(a[0],a[1],a[2],a[3])},
+  circle(...a){chk("circle",a,3);x.fillStyle=a[3];x.beginPath();x.arc(a[0],a[1],Math.abs(a[2]),0,7);x.fill()},
+  line(...a){chk("line",a,4);x.strokeStyle=a[4];x.lineWidth=2;x.beginPath();x.moveTo(a[0],a[1]);x.lineTo(a[2],a[3]);x.stroke()},
+  triangle(...a){chk("triangle",a,6);x.fillStyle=a[6];x.beginPath();x.moveTo(a[0],a[1]);x.lineTo(a[2],a[3]);x.lineTo(a[4],a[5]);x.closePath();x.fill()}}}
+function run(code,x){x.fillStyle="#fff";x.fillRect(0,0,W,H);const a=api(x);new Function(...Object.keys(a),code)(...Object.values(a))}
+function sv(e){const m=e.message||String(e);
+ if(e instanceof ReferenceError)return "Datorn känner inte till “"+m.split(" ")[0]+"”. Stavfel? Eller saknas citattecken runt en färg?";
+ if(e instanceof SyntaxError)return "Syntaxfel: något är fel med tecknen. Saknas ett kommatecken, en parentes eller ett citattecken? ("+m+")";
+ return m}
+
+/* Flikar */
+const TABS=["1. Koordinater","2. Flytta & ändra","3. Hitta felen"];
+TABS.forEach((t,i)=>{const b=document.createElement("button");b.textContent=t;b.onclick=()=>show(i);$("#nav").appendChild(b)});
+function show(i){document.querySelectorAll("section").forEach((s,j)=>s.classList.toggle("on",i===j));document.querySelectorAll("#nav button").forEach((b,j)=>b.classList.toggle("on",i===j))}
+show(0);
+const pt=(c,e)=>{const r=c.getBoundingClientRect();return[Math.round((e.clientX-r.left)*W/r.width),Math.round((e.clientY-r.top)*H/r.height)]};
+
+/* 1. Koordinatsystem */
+const x1=mk("c1"),c1=$("#c1");let T,sc=0,last=null,hov=null;
+function newT(){T=[50*(1+Math.floor(Math.random()*7)),50*(1+Math.floor(Math.random()*5))];$("#q1").textContent="Klicka på punkten ("+T[0]+", "+T[1]+")"}
+function d1(){x1.fillStyle="#fff";x1.fillRect(0,0,W,H);grid(x1);
+ x1.fillStyle="#d00";x1.beginPath();x1.arc(0,0,5,0,7);x1.fill();x1.fillStyle="#d00";x1.font="bold 11px sans-serif";x1.fillText("origo (0, 0)",8,24);
+ if(hov){x1.strokeStyle="#3a6cf4";x1.setLineDash([4,4]);x1.beginPath();x1.moveTo(hov[0],0);x1.lineTo(hov[0],H);x1.moveTo(0,hov[1]);x1.lineTo(W,hov[1]);x1.stroke();x1.setLineDash([])}
+ if(last){x1.fillStyle="#e67e00";x1.beginPath();x1.arc(last[0],last[1],6,0,7);x1.fill()}}
+c1.onpointermove=e=>{hov=pt(c1,e);$("#pos").innerHTML="Musen är på <b>x = "+hov[0]+"</b>, <b>y = "+hov[1]+"</b>";d1()};
+c1.onpointerleave=()=>{hov=null;d1()};
+c1.onpointerdown=e=>{const p=pt(c1,e);last=p;hov=p;const d=Math.hypot(p[0]-T[0],p[1]-T[1]);
+ if(d<=14){sc++;$("#sc").textContent=sc;$("#m1").className="msg ok";$("#m1").textContent="Rätt! Du hittade ("+T[0]+", "+T[1]+").";newT()}
+ else{$("#m1").className="msg er";$("#m1").textContent="Du klickade på x = "+p[0]+", y = "+p[1]+". Du söker x = "+T[0]+", y = "+T[1]+". "+(p[0]<T[0]?"Gå åt höger. ":p[0]>T[0]?"Gå åt vänster. ":"")+(p[1]<T[1]?"Gå längre ner.":p[1]>T[1]?"Gå längre upp.":"")}
+ d1()};
+$("#skip").onclick=()=>{newT();last=null;d1()};newT();d1();
+
+/* 2. Utforska former */
+const x2=mk("c2"),c2=$("#c2");
+const SH={
+ rectangle:{n:"Rektangel",p:[["x",0,400],["y",0,300],["bredd",1,400],["höjd",1,300]],v:[200,100,120,70],mx:[0],my:[1]},
+ circle:{n:"Cirkel",p:[["x",0,400],["y",0,300],["radie",1,150]],v:[200,150,50],mx:[0],my:[1]},
+ line:{n:"Linje",p:[["x1",0,400],["y1",0,300],["x2",0,400],["y2",0,300]],v:[80,60,320,220],mx:[0,2],my:[1,3]},
+ triangle:{n:"Triangel",p:[["x1",0,400],["y1",0,300],["x2",0,400],["y2",0,300],["x3",0,400],["y3",0,300]],v:[200,60,120,220,280,220],mx:[0,2,4],my:[1,3,5]}};
+let sk="circle",cl="red";
+COLS.forEach(c=>{const o=document.createElement("option");o.value=o.textContent=c;$("#col").appendChild(o)});
+$("#col").onchange=e=>{cl=e.target.value;d2()};
+Object.keys(SH).forEach(k=>{const b=document.createElement("button");b.textContent=SH[k].n;b.dataset.k=k;b.onclick=()=>{sk=k;buildSl();d2()};$("#shp").appendChild(b)});
+function buildSl(){const s=SH[sk];$("#sls").innerHTML="";document.querySelectorAll("#shp button").forEach(b=>b.classList.toggle("on",b.dataset.k===sk));
+ s.p.forEach((p,i)=>{const d=document.createElement("div");d.className="sl";d.innerHTML="<b>"+p[0]+"</b><input type=range min="+p[1]+" max="+p[2]+" value="+s.v[i]+"><span>"+s.v[i]+"</span>";
+  const r=d.querySelector("input"),o=d.querySelector("span");r.oninput=()=>{s.v[i]=+r.value;o.textContent=r.value;d2()};$("#sls").appendChild(d)})}
+function d2(){x2.fillStyle="#fff";x2.fillRect(0,0,W,H);if($("#g2").checked)grid(x2);
+ const a=api(x2),s=SH[sk];a[sk](...s.v,cl);$("#cd2").textContent=sk+"("+s.v.join(", ")+", \""+cl+"\");"}
+$("#g2").onchange=d2;
+let dr=null;
+c2.onpointerdown=e=>{dr=pt(c2,e);c2.setPointerCapture(e.pointerId)};
+c2.onpointermove=e=>{if(!dr)return;const p=pt(c2,e),s=SH[sk],dx=p[0]-dr[0],dy=p[1]-dr[1];
+ s.mx.forEach(i=>s.v[i]=Math.max(0,Math.min(400,s.v[i]+dx)));s.my.forEach(i=>s.v[i]=Math.max(0,Math.min(300,s.v[i]+dy)));dr=p;buildSl();d2()};
+c2.onpointerup=()=>dr=null;
+buildSl();d2();
+
+/* 3. Hitta felen */
+const EX=[
+{t:"Stavfel",th:"Kommandon måste stavas exakt. Datorn gissar aldrig vad du menade. Läs felmeddelandet – det säger oftast var det är fel.",
+ code:'fill("white");\nrectangel(50, 50, 120, 80, "red");',
+ sol:'fill("white");\nrectangle(50, 50, 120, 80, "red");',hint:"Titta noga på ordet rectangle. Är det stavat likadant?"},
+{t:"Citattecken och färger",th:"Text och färgnamn måste stå inom citattecken: \"blue\". Utan citattecken tror datorn att blue är ett namn på något den ska känna till. Färgnamn skrivs på engelska.",
+ code:'fill("white");\nrectangle(200, 60, 100, 100, blue);\ncircle(100, 100, 40, "gren");',
+ sol:'fill("white");\nrectangle(200, 60, 100, 100, "blue");\ncircle(100, 100, 40, "green");',hint:"Ett fel saknar citattecken, ett annat har stavfel på färgen. Rätta ett i taget!"},
+{t:"x och y i fel ordning",th:"Alltid x först, sedan y. x = åt höger, y = nedåt. Om ett tal är större än rutan (400 × 300) hamnar formen utanför bilden.",
+ code:'fill("white");\ncircle(60, 300, 40, "orange");\nrectangle(200, 20, 150, 60, "purple");',
+ sol:'fill("white");\ncircle(300, 60, 40, "orange");\nrectangle(20, 200, 150, 60, "purple");',hint:"Jämför med bilden: cirkeln ska vara långt åt höger och högt upp. Vilket tal styr höger/vänster?"},
+{t:"Linjer",th:"En linje behöver två punkter: början (x1, y1) och slut (x2, y2), och sedan färgen. Det blir 5 värden. En vågrät linje har samma y i båda ändar, en lodrät har samma x.",
+ code:'fill("white");\nline(50, 50, 350, "black");\nline(50, 50, 50, 250, "black")\nline(50, 250, 350, 250 "black");',
+ sol:'fill("white");\nline(50, 50, 350, 50, "black");\nline(50, 50, 50, 250, "black");\nline(50, 250, 350, 250, "black");',hint:"Räkna värdena i varje rad. Och titta efter ett saknat kommatecken."},
+{t:"Triangel och träd",th:"En triangel har tre hörn, alltså tre x/y-par (6 tal). Mindre y betyder högre upp. Rektangeln har bredd först, sedan höjd.",
+ code:'fill("white");\ntriangle(200, 160, 120, 40, 280, 40, "green");\nrectangle(185, 160, 70, 30, "brown");',
+ sol:'fill("white");\ntriangle(200, 40, 120, 160, 280, 160, "green");\nrectangle(185, 160, 30, 70, "brown");',hint:"Trädet ska ha toppen uppåt och stammen ska vara högre än den är bred."},
+{t:"Husbygget",th:"Nu är alla fel blandade: saknade värden, kommatecken och förväxlade x/y. Rätta rad för rad och kör efter varje ändring.",
+ code:'fill("lightblue");\nrectangle(100, 150, 200, 120, "khaki");\ntriangle(80, 150, 200, 70, 320, "firebrick");\nrectangle(185, 200, 70, 30, "saddlebrown");\ncircle(50, 340, 30, "yellow");\nline(0, 270, 400, 270 "green");',
+ sol:'fill("lightblue");\nrectangle(100, 150, 200, 120, "khaki");\ntriangle(80, 150, 200, 70, 320, 150, "firebrick");\nrectangle(185, 200, 30, 70, "saddlebrown");\ncircle(340, 50, 30, "yellow");\nline(0, 270, 400, 270, "green");',hint:"Felmeddelandet stannar vid första felet. Rätta det, kör igen, och fortsätt."}];
+const xu=mk("cu"),xt=mk("ct");let cur=0,tries=0;const done=new Set();
+const msg=(t,c)=>{$("#m3").textContent=t;$("#m3").className="msg "+(c||"")};
+function lst(){$("#exl").innerHTML="";EX.forEach((e,i)=>{const b=document.createElement("button");b.textContent=(i+1)+". "+e.t;b.className=(i===cur?"on ":"")+(done.has(i)?"done":"");b.onclick=()=>load(i);$("#exl").appendChild(b)})}
+function load(i){cur=i;tries=0;$("#ed").value=EX[i].code;$("#th").innerHTML="<b>Teori:</b> "+EX[i].th;$("#sol").disabled=true;msg("Tryck på Kör och läs vad som händer.");lst();draw(false)}
+function draw(cmp){let ok=false;
+ try{run(EX[cur].sol,xt)}catch(e){}
+ try{run($("#ed").value,xu);
+  if(cmp){const a=xu.getImageData(0,0,W,H).data,b=xt.getImageData(0,0,W,H).data;let d=0;
+   for(let i=0;i<a.length;i+=4)if(Math.abs(a[i]-b[i])+Math.abs(a[i+1]-b[i+1])+Math.abs(a[i+2]-b[i+2])>40)d++;
+   ok=d<W*H*0.003;
+   if(ok){msg("Helt rätt! Bra jobbat. Kan du förklara vad felet var?","ok");done.add(cur);lst()}
+   else msg("Koden körs utan felmeddelande, men bilden är inte lika ännu ("+Math.round(100-d/(W*H)*100)+" % lika). Jämför bilderna: vad skiljer?","er")}
+ }catch(e){if(cmp)msg(sv(e),"er")}
+ if($("#g3").checked){grid(xu);grid(xt)}}
+$("#run").onclick=()=>{tries++;if(tries>=3)$("#sol").disabled=false;draw(true)};
+$("#ed").onkeydown=e=>{if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)){e.preventDefault();$("#run").click()}};
+$("#g3").onchange=()=>draw(false);
+$("#hint").onclick=()=>msg("💡 "+EX[cur].hint);
+$("#sol").onclick=()=>{$("#ed").value=EX[cur].sol;msg("Här är lösningen. Jämför med din kod: vilka rader var annorlunda?");draw(false)};
+$("#rst").onclick=()=>load(cur);
+$("#cp").onclick=async()=>{try{await navigator.clipboard.writeText($("#ed").value);msg("Koden är kopierad. Klistra in den på koda.nu.")}catch(e){$("#ed").select();msg("Markera koden och tryck Ctrl+C.")}};
+load(0);
+</script></body></html>
